@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const {SECRET_KEY} = require('./constants')
 
 const sign = (payload) => {
-    return jwt.sign(payload, SECRET_KEY)
+    return jwt.sign(payload, SECRET_KEY, { expiresIn: '1d' })
 }
 
 const verify = (token) => {

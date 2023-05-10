@@ -12,11 +12,11 @@ const main = async () => {
     const question = util.promisify(rl.question).bind(rl)
     const firstName = await question("First name: ")
     const lastName = await question("Last name: ")
-    const username = await question("Username: ")
+    const email = await question("Email: ")
     const password = await question("Password: ")
     const role = "superuser"
     const user = await User.create({
-        username,
+        email,
         password,
         firstName,
         lastName,

@@ -1,5 +1,6 @@
 const { verify } = require("../utils/jwt")
 const User = require("../models/user")
+const BlacklistedToken = require("../models/blacklisted-token")
 
 const setUser = async (req, res, next) => {
     const authTokens = req.headers.authorization
@@ -7,14 +8,17 @@ const setUser = async (req, res, next) => {
     try {
         if (authTokens) {
             const token = authTokens.split(" ")[1]
-            const payload = verify(token)
-            const user = await User.findById(payload.userID).select("-password")
-            req.payload = payload
-            req.token = token
-            if (user) {
-                req.user = user
-                if (user.role !== "superuser") {
-                    req.filters.tenant = user.tenant
+            const blacklistedToken = await BlacklistedToken.findOne({ token })
+            if (!blacklistedToken) {
+                const payload = verify(token)
+                const user = await User.findById(payload.userID).select("-password")
+                req.payload = payload
+                req.token = token
+                if (user) {
+                    req.user = user
+                    if (user.role !== "superuser") {
+                        req.filters.tenant = user.tenant
+                    }
                 }
             }
         }
