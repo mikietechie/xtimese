@@ -10,3 +10,5 @@ It is easy and easily scalable, it also uses less resources.
 
 It is less secure though.
 
+## TypeScript version coming Soon
+
